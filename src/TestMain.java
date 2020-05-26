@@ -42,8 +42,8 @@ public class TestMain {
         }
         return null;
     }
-    public static void main(String [] args)
-    {
+    public static void main(String [] args){
+    /*TestTheFailed.Failed(args);*/
         Scanner userInputScanner             = new Scanner(System.in);
         ArrayList<String> logFileGrabbedInfo = new ArrayList<>();
 
