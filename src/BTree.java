@@ -43,8 +43,45 @@ public class BTree<T extends Comparable<T>> {
     
 	//Task 2.2
     public boolean insert2pass(T value) {
-    	// TODO: implement your code here
-		return false;
+        Chain<T> toSplit = new Chain<>(null);
+        Pair couple = detectiveSearch(value, root, toSplit);
+		boolean isFull = (couple.foundNode.numberOfKeys() == maxKeySize);
+		 if (isFull) {
+		     ChainedNode<T> curr = couple.toSplit.first;
+		     while (curr.next != null){
+		         Node<T> node = curr.nodeInTree;
+		         curr = curr.next;
+		         split(node);
+             }
+         }
+        couple.foundNode.addKey(value);
+        return true;
+    }
+
+    public
+
+    public Pair<T> detectiveSearch(T value, Node<T> curr, Chain<T> toSplit){
+        Pair<T> output;
+        int i = 1;
+        while(i <= curr.numberOfKeys() && value.compareTo(curr.getKey(i)) > 0)
+            i++;
+        if (i <= curr.numberOfKeys() && value.compareTo(curr.getKey(i)) == 0){
+
+            if (curr.numberOfKeys() < maxKeySize)
+                toSplit.cleanChain();
+            else
+                toSplit.addNode(new ChainedNode<>(curr));
+
+            output = new Pair<T>(curr, toSplit);
+            return output;
+        }
+        else if (curr.numberOfKeys() == 0){ //key was not found
+            output = new Pair<T>(null, null);
+            return output;
+        }
+
+        else
+            return detectiveSearch(value, curr.getChild(i), toSplit);
     }
     
     /**
@@ -838,4 +875,40 @@ public class BTree<T extends Comparable<T>> {
         }
     }
 
-}
+    public class Chain<T extends Comparable<T>> {
+        private ChainedNode<T> first;
+        private ChainedNode<T> last;
+
+        public Chain(ChainedNode<T> node) {
+            first = node;
+            last = first;
+        }
+        public void addNode(ChainedNode<T> node) {
+            last.next = node;
+        }
+        public void cleanChain() {
+            first = null;
+        }
+    }
+
+    public class ChainedNode<T extends Comparable<T>> {
+        private Node<T> nodeInTree;
+        private ChainedNode<T> next;
+
+        public ChainedNode(Node<T> node){
+            this.nodeInTree = node;
+            next = null;
+        }
+    }
+
+    public class Pair<T extends Comparable<T>> {
+        private Node<T> foundNode;
+        private Chain<T> toSplit;
+
+        public Pair(Node<T> found, Chain<T> toSplit){
+            foundNode = found;
+            this.toSplit = toSplit;
+        }
+    }
+
+    }
