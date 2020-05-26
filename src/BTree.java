@@ -91,7 +91,8 @@ public class BTree<T extends Comparable<T>> {
         if (root == null) {                         //empty tree
             root = new Node<T>(null, maxKeySize, maxChildrenSize);
             root.addKey(value);
-        } else {
+        }
+        else {
             Node<T> node = root;
             while (node != null) {
                 Node<T> parent = node.parent;
